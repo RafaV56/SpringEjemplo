@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xlmns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" th:href="@{/CSS/w3.css}">
+<title th:text="${titulo}"></title>
+</head>
+<body>
+<body class="w3-padding">
+<div class="w3-bar w3-black w3-padding">
+  <a  th:href="@{/listar}"class="w3-bar-item w3-hover-green">Listar</a>
+  <a th:href="@{/perfil}" class="w3-bar-item w3-hover-green">Perfil</a>
+  <a th:href="@{/properties}" class="w3-bar-item w3-hover-green">Properties</a>
+  <a th:href="@{/path/cualquier cosa}" class="w3-bar-item w3-hover-green">PathVariable/(Variable)</a>
+  <a th:href="@{/(name='Desde listar')}" class="w3-bar-item w3-hover-green">Inicio</a>
+</div>
+<div class="w3-border w3-border-red w3-center w3-padding w3-small">
+<span th:text="${fecha}"></span>
+</div>
+<h2 class="w3-teal w3-border w3-border-red w3-hover-shadow w3-center w3-padding">Path variable</h2>
+<h4  th:text="'Variable pasada por parámetro: '+${variable}" class="w3-pale-blue w3-border w3-border-blue w3-hover-shadow w3-center w3-padding"></h4>
+<h4  th:text="'Variables pasada por parámetro: '+${variable}+' número: '+${numero}" 
+class="w3-pale-blue w3-border w3-border-blue w3-hover-shadow w3-center w3-padding"></h4>
+</body>
+
+</body>
+</html>

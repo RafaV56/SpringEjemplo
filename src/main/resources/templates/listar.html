@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xlmns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" th:href="@{/CSS/w3.css}">
+<title>Clase listar</title>
+</head>
+<body class="w3-container w3-padding">
+<div class="w3-bar w3-black w3-padding">
+  <a  th:href="@{/listar}"class="w3-bar-item w3-hover-green">Listar</a>
+  <a th:href="@{/perfil}" class="w3-bar-item w3-hover-green">Perfil</a>
+  <a th:href="@{/properties}" class="w3-bar-item w3-hover-green">Properties</a>
+  <a th:href="@{/path/cualquier cosa}" class="w3-bar-item w3-hover-green">PathVariable/(Variable)</a>
+  <a th:href="@{/(name='Desde listar')}" class="w3-bar-item w3-hover-green">Inicio</a>
+</div>
+<div class="w3-border w3-border-red w3-center w3-padding w3-small">
+<span th:text="${fecha}"></span>
+</div>
+<div class="w3-panel w3-leftbar w3-pale-green w3-border-green">
+<h1 >Bienvenido</h1>
+</div>
+
+<p>
+<!-- Como se usa if en thymeleaf -->
+<span th:if="${usuarios.size()!=0}" th:text="'hay usuarios'" class="w3-blue w3-padding"></span>
+<span th:if="${usuarios.size()==0}" th:text="'No hay usuarios'" class="w3-blue w3-padding"></span>
+</p>
+<table class="w3-teal" th:if="${!usuarios.isEmpty()}">
+<tr>
+<th>Nombre</th>
+<th>Apellido</th>
+<th>Email</th>
+</tr>
+<!-- Como se usa un foreach en thymeleaf -->
+<tr th:each="usuario: ${usuarios}">
+ <td th:text="${usuario.nombre}" class="w3-white"></td>
+ <td th:text="${usuario.apellido}"class="w3-white"></td>
+ <td th:text="${usuario.email}" class="w3-white"></td>
+</tr>
+</table>
+<!-- Para usar los enlaces se usa el @ y entre las llaves la ruta mapeada a un m´3todo handler -->
+<p><a th:href="@{/path/cualquier cosa}" class="w3-padding w3-round-large w3-purple w3-hover-deep-purple">PathVariable: /path/cualquier cosa</a>  </p>
+<p><a th:href="@{/path/cualquier cosa/8}" class="w3-padding w3-round-large w3-purple w3-hover-deep-purple">PathVariable dos parametros: /path/cualquier cosa/8</a>  </p>
+<!--  Puede tener mas parametros con separarlos con comas, pero ten cuidado si es texto que lleven las comillas simples
+<p><a th:href="@{/(name='Desde listar',otro=34)}" class="w3-padding w3-round-large w3-purple w3-hover-deep-purple">Inicio</a>  </p>
+ -->
+
+</body>
+</html>

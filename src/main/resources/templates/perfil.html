@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xlmns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" th:href="@{CSS/w3.css}">
+<title th:text="${usuario.nombre}"></title>
+</head>
+<body class="w3-container w3-padding">
+<div class="w3-bar w3-black w3-padding">
+  <a  th:href="@{/listar}"class="w3-bar-item w3-hover-green">Listar</a>
+  <a th:href="@{/perfil}" class="w3-bar-item w3-hover-green">Perfil</a>
+  <a th:href="@{/properties}" class="w3-bar-item w3-hover-green">Properties</a>
+  <a th:href="@{/path/cualquier cosa}" class="w3-bar-item w3-hover-green">PathVariable/(Variable)</a>
+  <a th:href="@{/}" class="w3-bar-item w3-hover-green">Inicio</a>
+</div>
+	<div
+		class="w3-border w3-border-red w3-hover-shadow w3-center w3-padding">
+		<h2>
+			<span th:text="${fecha}"></span>
+		</h2>
+	</div>
+	<h1>
+		Bienvenido <span th:text="${usuario.nombre}"></span> <span
+			th:text="${usuario.apellido}"></span>
+	</h1>
+	<p>
+		<!-- Uso del if con Thymeleaf -->
+		<span th:if="${usuario.email}" th:text="${usuario.email}"
+			class="w3-padding w3-round-large w3-pale-green w3-hover-deep-purple"></span>
+		<span th:if="${usuario.email == null}" th:text="'No hay email'"
+			class="w3-padding w3-round-large w3-pale-green w3-hover-deep-purple"></span>
+	</p>
+	<p>
+		<a href="/listar"
+			class="w3-padding w3-round-large w3-purple w3-hover-deep-purple">Listar</a>
+	</p>
+	<p>
+		<a href="/"
+			class="w3-padding w3-round-large w3-purple w3-hover-deep-purple">Inicio</a>
+	</p>
+</body>
+</html>

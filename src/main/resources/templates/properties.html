@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xlmns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- el doc está en static/CSS/w3@.css no es necesario poner el static y se usa  -->
+<link rel="stylesheet" type="text/css" th:href="@{CSS/w3.css}">
+<title th:text="${titulo}"></title>
+</head>
+<body class="w3-container w3-padding w3-black">
+<div class="w3-bar w3-black w3-padding">
+  <a  th:href="@{/listar}"class="w3-bar-item w3-hover-green">Listar</a>
+  <a th:href="@{/perfil}" class="w3-bar-item w3-hover-green">Perfil</a>
+  <a th:href="@{/properties}" class="w3-bar-item w3-hover-green">Properties</a>
+  <a th:href="@{/path/cualquier cosa}" class="w3-bar-item w3-hover-green">PathVariable/(Variable)</a>
+  <a th:href="@{/}" class="w3-bar-item w3-hover-green">Inicio</a>
+</div>
+<div class="w3-border w3-border-red w3-center w3-padding w3-small">
+<span th:text="${fecha}"></span>
+</div>
+<h3 th:text="${titulo}" class="w3-panel w3-leftbar w3-pale-green w3-center w3-border-green w3-xxlarge"></h3>
+	<div
+		class="w3-pale-blue w3-border w3-border-blue w3-hover-shadow w3-padding">
+		<h3 class="w3-panel w3-border w3-pale-green w3-border-green w3-center">Como usar un fichero properties que no sea
+			aplication.properties</h3>
+		<div class="w3-border w3-border-blue w3-hover-shadow w3-padding">
+			<ol>
+				<li>Se crea un fichero properties, en <code
+						class="w3-text-green">src/main/resources</code> ejemplo
+					titulos.properties en una carpeta llamada PropertiesAPP
+				</li>
+				<li>Cada línea puede ir así <code class="w3-text-green">titulo.properties:</code>
+					<code class="w3-text-blue">Como usar un fichero Properties</code> </li>
+				<li>
+					Se crea una clase java en el paquete principal de la aplicacion con la siguiente forma.
+				<pre class="w3-text-blue w3-border w3-border-blue w3-padding">
+/**
+ * Clase para poder usar los ficheros properties creados por el admin en el folder PropetiesAPP
+ * @author ejemplodecodigo.ddns.net
+ *
+ */
+@Configuration
+@PropertySources({
+	@PropertySource("classpath:/PropertiesAPP/titulos.properties")
+})
+public class TitulosProperties {
+
+}
+				
+				</pre>
+				</li>
+				<li>
+				Solo queda usarlo en una variable, y anexarlo a modelo si se quiere enviar a la vista
+				<pre class="w3-text-blue w3-border w3-border-blue w3-padding">
+/**
+ * Variable que viene desde /PropertiesAPP/titulos.properties
+ */
+@Value("${titulo.properties}")
+private String tituloProperties;
+					
+/*-----------------------------------------*/
+
+/**
+* Controlador para ir a la web donde explicas como se usa un fichero .properties creado por el usuario
+* @param model
+* @return
+ */
+@GetMapping("/properties")
+public String properties(Model model) {
+	model.addAttribute("titulo", tituloProperties);
+	return "properties";	
+}
+</pre>
+				
+				</li>
+			</ol>
+		</div>
+
+	</div>
+
+</body>
+</html>

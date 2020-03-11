@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xlmns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- el doc está en static/CSS/w3@.css no es necesario poner el static y se usa  -->
+<link rel="stylesheet" type="text/css" th:href="@{CSS/w3.css}">
+<title th:text="${name}"></title>
+</head>
+<body class="w3-container w3-padding">
+<div class="w3-bar w3-black w3-padding">
+  <a  th:href="@{/listar}"class="w3-bar-item w3-hover-green">Listar</a>
+  <a th:href="@{/perfil}" class="w3-bar-item w3-hover-green">Perfil</a>
+  <a th:href="@{/properties}" class="w3-bar-item w3-hover-green">Properties</a>
+  <a th:href="@{/path/cualquier cosa}" class="w3-bar-item w3-hover-green">PathVariable/(Variable)</a>
+  <a th:href="@{/redirect}" class="w3-bar-item w3-hover-green">redirect</a>
+  <a th:href="@{/(name='Desde listar')}" class="w3-bar-item w3-hover-green">Inicio</a>
+</div>
+<div class="w3-border w3-border-red w3-center w3-padding w3-small">
+<span th:text="${fecha}"></span>
+</div>
+<div class="w3-panel w3-leftbar w3-pale-green w3-border-green">
+<h1 >Bienvenido <span th:text="${name}"></span></h1>
+</div>
+
+<p>
+<!-- Cargar una imagen desde la ruta de static / img / foto -->
+<img th:src="@{img/img.PNG}" class="w3-image" style="width: 10%; height: 10%"></img>
+</p>
+
+
+
+
+</body>
+</html>

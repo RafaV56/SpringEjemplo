@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xlmns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- el doc está en static/CSS/w3@.css no es necesario poner el static y se usa  -->
+<link rel="stylesheet" type="text/css" th:href="@{CSS/w3.css}">
+<title th:text="${titulo}"></title>
+</head>
+<body class="w3-container w3-padding w3-black">
+	<div class="w3-bar w3-black w3-padding">
+		<a th:href="@{/listar}" class="w3-bar-item w3-hover-green">Listar</a>
+		<a th:href="@{/perfil}" class="w3-bar-item w3-hover-green">Perfil</a>
+		<a th:href="@{/properties}" class="w3-bar-item w3-hover-green">Properties</a>
+		<a th:href="@{/path/cualquier cosa}"
+			class="w3-bar-item w3-hover-green">PathVariable/(Variable)</a> <a
+			th:href="@{/}" class="w3-bar-item w3-hover-green">Inicio</a>
+	</div>
+	<div class="w3-border w3-border-red w3-center w3-padding w3-small">
+		<span th:text="${fecha}"></span>
+	</div>
+	<div
+		class="w3-white w3-border w3-border-blue w3-hover-shadow w3-padding">
+		<h3 th:text="${titulo}"
+			class="w3-panel w3-leftbar w3-pale-green w3-center w3-border-green w3-xxlarge"></h3>
+		<p>
+			<a th:href="@{/redirectInicio}"
+				class="w3-teal w3-border
+		w3-border-red w3-round w3-padding w3-hover-green">Redirect
+				al incio</a> cambiará la url, petición nueva
+		</p>
+		<p>
+			<a th:href="@{/forwardtInicio}"
+				class="w3-teal w3-border
+		w3-border-red w3-round w3-padding w3-hover-green">forward
+				al incio</a> cambiará la url, solo urls de la aplicación
+		</p>
+	</div>
+</body>
+</html>
