@@ -9,12 +9,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.models.Fecha;
 import com.example.demo.models.Usuario;
+
+import ch.qos.logback.classic.Logger;
 
 
 
@@ -27,6 +30,9 @@ public class IndexController {
 	 */
 	@Value("${titulo.pathVariable}")
 	private String tituloPath;
+	
+	@Value("${titulo.formulario}")
+	private String tituloForm;
 	
 	/**
 	 * Variable que viene desde /PropertiesAPP/titulos.properties
@@ -89,10 +95,7 @@ public class IndexController {
 		usuario.setApellido("Velásquez");
 		usuario.setNombre("Rafael");
 		//usuario.setEmail(null);
-		Fecha fecha=Fecha.creaFechaDeAhora();
 		model.addAttribute("usuario",usuario);
-		model.addAttribute("fecha",fecha);
-		
 		return "perfil";
 	}
 	
@@ -163,6 +166,39 @@ public class IndexController {
 	public String forward(Model model) {
 		
 		return "forward:/index";
+	}
+	
+	/**
+	 * Formalarios get
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/form")
+	public String form(Model model) {
+		model.addAttribute("titulo", tituloForm);
+		return "form";
+	}
+	/**
+	 * Formalarios post
+	 * @param model
+	 * @return
+	 */
+	@PostMapping("/form")
+	public String formPost(Model model,
+			@RequestParam String username, //el nombre de la variable debe ser igual a la del name del form 
+			@RequestParam(value = "password") String password, //puedes usar value tambien
+			@RequestParam String email) {
+		
+		//verificamos que no esten vacios para que no se muestren las tarjetas rojas en la vista
+		username=username.isEmpty()?null:username;
+		password=password.isEmpty()?null:password;
+		email=email.isEmpty()?null:email;
+
+		model.addAttribute("username", username); //pasamos las variables al modelo
+		model.addAttribute("password", password);
+		model.addAttribute("email", email);
+		model.addAttribute("titulo", tituloForm);
+		return "form";
 	}
 	
 	/**

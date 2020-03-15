@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xlmns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- el doc est� en static/CSS/w3@.css no es necesario poner el static y se usa  -->
+<link rel="stylesheet" type="text/css" th:href="@{CSS/w3.css}">
+<title th:text="${titulo}"></title>
+</head>
+<body class="w3-container w3-padding w3-black">
+	<div class="w3-bar w3-black w3-padding">
+		<a th:href="@{/(name='Desde listar')}"
+			class="w3-bar-item w3-hover-green">Inicio</a> <a th:href="@{/listar}"
+			class="w3-bar-item w3-hover-green">Listar</a> <a th:href="@{/perfil}"
+			class="w3-bar-item w3-hover-green">Perfil</a> <a
+			th:href="@{/properties}" class="w3-bar-item w3-hover-green">Properties</a>
+		<a th:href="@{/path/cualquier cosa}"
+			class="w3-bar-item w3-hover-green">PathVariable/(Variable)</a> <a
+			th:href="@{/redirect}" class="w3-bar-item w3-hover-green">redirect</a>
+		<span th:text="${fecha}"
+			class="w3-right w3-border w3-border-red w3-center w3-padding w3-small"></span>
+	</div>
+	<h3 th:text="${titulo}"
+		class="w3-panel w3-leftbar w3-pale-green w3-center w3-border-green w3-xxlarge w3-round-xlarge"></h3>
+	<div
+		class="w3-pale-blue w3-border w3-border-blue w3-hover-shadow w3-padding">
+		<div class="w3-container w3-teal">
+			<h3 class="w3-center">
+				<strong>Formulario sencillo</strong>
+			</h3>
+		</div>
+		<ol>
+			<li>Se crea un controlador, en este caso está en indexController y se llama<code
+					class="w3-text-blue"> public String form(Model model) </code> que envía está vista llamada form
+			</li>
+			<li>Después de darle a registrar viaja tambien al indexController y busca a:</code>
+				<code class="w3-text-blue">public String formPost</code> anotado como post y con los parametros del formulario.
+			</li>
+			<li>
+				Por último los recupera y los devuelve a la vista form donde se imprimen abajo en las tarjetas rojas
+			</li>
+		</ol>
+		<form method="post" th:action="@{/form}">
+			<label class="w3-text-teal" for="username"><b>Nombre
+					usuario</b></label> <input class="w3-input w3-border w3-white w3-border-teal"
+				type="text" name="username" id="username">
+				<div th:if="${username != null}">
+		<div
+			class="w3-panel w3-border w3-border-blue w3-hover-shadow w3-padding w3-red w3-display-containerd">
+			<span onclick="this.parentElement.style.display='none'"
+				class="w3-button w3-text-black w3-right w3-yellow">X</span>
+			<p>
+				<strong>Nombre de usuario: <span th:text="${username}"
+					class=""></span></strong>
+			</p>
+		</div>
+	</div>
+				 <label
+				class="w3-text-teal" for="password"><b>Password</b></label> <input
+				class="w3-input w3-border w3-white w3-border-teal" type="password"
+				name="password" id="password">
+					<div th:if="${password != null}">
+		<div
+			class="w3-panel w3-border w3-border-blue w3-hover-shadow w3-padding w3-red w3-display-containerd">
+			<span onclick="this.parentElement.style.display='none'"
+				class="w3-button w3-text-black w3-right w3-yellow">X</span>
+			<p>
+				<strong>Password: <span th:text="${password}" class=""></span></strong>
+			</p>
+		</div>
+	</div>
+				
+				 <label class="w3-text-teal"
+				for="email"><b>Email</b></label> <input
+				class="w3-input w3-border w3-white w3-border-teal" type="email"
+				name="email" id="email"> <input type="submit"
+				class="w3-green w3-margin-top w3-text-white w3-round-xlarge w3-ripple w3-border w3-border-teal"
+				value="Registrar" />
+				
+				<div th:if="${email != null}">
+		<div
+			class="w3-panel w3-border w3-border-blue w3-hover-shadow w3-padding w3-red w3-display-containerd">
+			<span onclick="this.parentElement.style.display='none'"
+				class="w3-button w3-text-black w3-right w3-yellow">X</span>
+			<p>
+				<strong>email: <span th:text="${email}" class=""></span></strong>
+			</p>
+		</div>
+	</div>
+				
+		</form>
+	</div>
+
+
+
+	<!-- 
+		<h3 class="w3-panel w3-border w3-pale-green w3-border-green w3-center">Como usar un fichero properties que no sea
+			aplication.properties</h3>
+		<div class="w3-border w3-border-blue w3-hover-shadow w3-padding">
+			<ol>
+				<li>Se crea un fichero properties, en <code
+						class="w3-text-green">src/main/resources</code> ejemplo
+					titulos.properties en una carpeta llamada PropertiesAPP
+				</li>
+				<li>Cada l�nea puede ir as� <code class="w3-text-green">titulo.properties:</code>
+					<code class="w3-text-blue">Como usar un fichero Properties</code> </li>
+				<li>
+					Se crea una clase java en el paquete principal de la aplicacion con la siguiente forma.
+				<pre class="w3-text-blue w3-border w3-border-blue w3-padding">
+/**
+ * Clase para poder usar los ficheros properties creados por el admin en el folder PropetiesAPP
+ * @author ejemplodecodigo.ddns.net
+ *
+ */
+@Configuration
+@PropertySources({
+	@PropertySource("classpath:/PropertiesAPP/titulos.properties")
+})
+public class TitulosProperties {
+
+}
+				
+				</pre>
+				</li>
+				<li>
+				Solo queda usarlo en una variable, y anexarlo a modelo si se quiere enviar a la vista
+				<pre class="w3-text-blue w3-border w3-border-blue w3-padding">
+/**
+ * Variable que viene desde /PropertiesAPP/titulos.properties
+ */
+@Value("${titulo.properties}")
+private String tituloProperties;
+					
+/*-----------------------------------------*/
+
+/**
+* Controlador para ir a la web donde explicas como se usa un fichero .properties creado por el usuario
+* @param model
+* @return
+ */
+@GetMapping("/properties")
+public String properties(Model model) {
+	model.addAttribute("titulo", tituloProperties);
+	return "properties";	
+}
+</pre>
+				
+				</li>
+			</ol>
+		</div>
+
+	</div>
+-->
+</body>
+</html>
