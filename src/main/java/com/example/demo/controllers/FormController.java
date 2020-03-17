@@ -34,7 +34,6 @@ public class FormController {
 	 */
 	@GetMapping("/form")
 	public String form(Model model) {
-		model.addAttribute("titulo", tituloForm);
 		return "form";
 	}
 	/**
@@ -56,7 +55,6 @@ public class FormController {
 		model.addAttribute("username", username); //pasamos las variables al modelo
 		model.addAttribute("password", password);
 		model.addAttribute("email", email);
-		model.addAttribute("titulo", tituloForm);
 		return "form";
 	}
 	
@@ -78,7 +76,6 @@ public class FormController {
 		usuario.setEmail(usuario.getEmail().isEmpty()?null:usuario.getEmail());
 		//------------------------------------------------------------------------------
 		model.addAttribute("usuario", usuario);
-		model.addAttribute("titulo", tituloForm);
 		return "formClass";
 	}
 	
@@ -89,7 +86,6 @@ public class FormController {
 	 */
 	@GetMapping("/formClass")
 	public String formClas(Model model) {
-		model.addAttribute("titulo", tituloForm);
 		return "formClass";
 	}
 	
@@ -101,7 +97,6 @@ public class FormController {
 	 */
 	@PostMapping("/formClassMap")//Se puede usar @ModelAttribute("user") para cambiar el nombre de la variable en la vista
 	public String formPostMap(@Valid UsuarioValido usuariovalido, BindingResult result, Model model) {//Binding despues del objeto a validar, y el obj el primero
-		model.addAttribute("titulo", tituloForm);
 		
 		if (result.hasErrors()) {//Mirarmos si hay errores
 			Map<String,String> errores=new HashMap<>();//Creamos un map para insertar los errores
@@ -122,15 +117,51 @@ public class FormController {
 	 */
 	@GetMapping("/formClassMap")
 	public String formClassMap(Model model) {
-		model.addAttribute("titulo", tituloForm);
 		model.addAttribute("usuarioValido", new UsuarioValido());//Se envía un usuario para que no tenga errores la vista
 		
 		return "formClassMap";
 	}
 	
 	
+	/**
+	 * Muestra el la vista para el uso de etiquetas thymeleaf de formularios
+	 * @param model
+	 * @return
+	 */
+	@GetMapping("/formClassThymeleaf")
+	public String formThymeleaf(Model model) {
+		UsuarioValido usuarioValido= new UsuarioValido();
+		usuarioValido.setApellido("Pasando este dato desde el controlador");
+		model.addAttribute("usuarioValido", usuarioValido);//Se envía un usuario para que no tenga errores la vista
+		
+		return "formClassThymeleaf";
+	}
 	
 	
+	/**
+	 * Uso de thyme leaf para solucionar los errores y el codigo de formularios, y pasar lo errores más sencillo 
+	 * @param usuariovalido
+	 * @param result
+	 * @param model
+	 * @return
+	 */
+	@PostMapping("/formClassThymeleaf")//Se puede usar @ModelAttribute("user") para cambiar el nombre de la variable en la vista
+	public String formPostThymeleaf(@Valid UsuarioValido usuariovalido,
+			BindingResult result,
+			Model model) {//Binding despues del objeto a validar, y el obj el primero
+		//aqúi ya podemos olvidar enviar erroes y al usuario
+		return "formClassThymeleaf";
+	}
+	
+	
+	/**
+	 * Este método es un atributo que siempre llevará el Modelo, algo común para todos como la fecha
+	 * @return
+	 */
+	@ModelAttribute("titulo")//Atributo que siempre llevara el model
+	public String titulo() {
+		return tituloForm;
+	}
 	/**
 	 * Este método es un atributo que siempre llevará el Modelo, algo común para todos como la fecha
 	 * @return
