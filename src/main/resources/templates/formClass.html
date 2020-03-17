@@ -7,18 +7,17 @@
 <link rel="stylesheet" type="text/css" th:href="@{CSS/w3.css}">
 <title th:text="${titulo}"></title>
 </head>
-<body class="w3-container w3-padding w3-black">
+<body class="w3-container w3-padding w3-white">
 	<div class="w3-bar w3-black w3-padding">
 		<a th:href="@{/(name='Desde listar')}"
-			class="w3-bar-item w3-hover-green">Inicio</a> 
-			<a th:href="@{/listar}" class="w3-bar-item w3-hover-green">Listar</a>
-			 <a th:href="@{/perfil}" class="w3-bar-item w3-hover-green">Perfil</a>
-			 <a	th:href="@{/properties}" class="w3-bar-item w3-hover-green">Properties</a>
-		<a th:href="@{/path/cualquier cosa}"
-			class="w3-bar-item w3-hover-green">PathVariable/(Variable)</a> <a
-			th:href="@{/redirect}" class="w3-bar-item w3-hover-green">redirect</a>
-		<span th:text="${fecha}"
-			class="w3-right w3-border w3-border-red w3-center w3-padding w3-small"></span>
+			class="w3-bar-item w3-hover-green">Inicio</a> <a th:href="@{/listar}"
+			class="w3-bar-item w3-hover-green">Listar</a> <a th:href="@{/perfil}"
+			class="w3-bar-item w3-hover-green">Perfil</a> <a
+			th:href="@{/properties}" class="w3-bar-item w3-hover-green">Properties</a>
+		<a th:href="@{/path/cualquier cosa}" class="w3-bar-item w3-hover-green">PathVariable/(Variable)</a> 
+		<a th:href="@{/form}" class="w3-bar-item w3-hover-green">Formularios</a> 
+		<a th:href="@{/redirect}" class="w3-bar-item w3-hover-green">redirect</a>
+		<span th:text="${fecha}" class="w3-right w3-border w3-border-red w3-center w3-padding w3-small"></span>
 	</div>
 	<h3 th:text="${titulo}"
 		class="w3-panel w3-leftbar w3-pale-green w3-center w3-border-green w3-xxlarge w3-round-xlarge"></h3>
@@ -26,50 +25,51 @@
 		<a th:href="@{/formClass}" class="w3-bar-item w3-hover-green">Fomulario usando clase</a>
 		<a th:href="@{/formClassMap}" class="w3-bar-item w3-hover-green">Fomulario usando @Valid</a>
 		</div>
-	<div
+ 	<div 
 		class="w3-pale-blue w3-border w3-border-blue w3-hover-shadow w3-padding">
-		<div class="w3-container w3-teal">
+		<div class="w3-container w3-sand">
 			<h3 class="w3-center">
-				<strong>Formulario sencillo usando @RequestParam</strong>
+				<strong>Formulario sencillo usando una Clase para tomar los datos del formulario</strong>
 			</h3>
 		</div>
 		<ol>
 			<li>Se crea un controlador, en este caso está en FormController y se llama<code
-					class="w3-text-blue"> public String form(Model model) </code> que envía está vista llamada form
+					class="w3-text-blue"> public String formClas(Model model) { </code> que envía está vista llamada formClass
 			</li>
 			<li>Después de darle a registrar viaja tambien al indexController y busca a:</code>
-				<code class="w3-text-blue">public String formPost</code> anotado como post y con los parametros del formulario.
+				<code class="w3-text-blue">public String formPostClase(Usuario usuario, Model model) {</code> 
+			 	Creando al usuario directamente, solo usando los name de los inputs, y asignandolos a las variables de la clase.
 			</li>
 			<li>
-				Por último los recupera y los devuelve a la vista form donde se imprimen abajo en las tarjetas rojas
+				Por último solo queda añadir al usuario a la model, y usar el objeto como abajo se hace, ej: usuario.nombre
 			</li>
 		</ol>
-		<form method="post" th:action="@{/form}">
-			<label class="w3-text-teal" for="username"><b>Nombre
+		<form method="post" th:action="@{/formClass}">
+			<label class="w3-text-teal" for="nombre"><b>Nombre
 					usuario</b></label> <input class="w3-input w3-border w3-white w3-border-teal"
-				type="text" name="username" id="username">
-				<div th:if="${username != null}">
+				type="text" name="nombre" id="nombre">
+				<div th:if="${usuario != null && usuario.nombre != null}">
 		<div
 			class="w3-panel w3-border w3-border-blue w3-hover-shadow w3-padding w3-red w3-display-containerd">
 			<span onclick="this.parentElement.style.display='none'"
 				class="w3-button w3-text-black w3-right w3-yellow">X</span>
 			<p>
-				<strong>Nombre de usuario: <span th:text="${username}"
+				<strong>Nombre de usuario: <span th:text="${usuario.nombre}"
 					class=""></span></strong>
 			</p>
 		</div>
 	</div>
 				 <label
-				class="w3-text-teal" for="password"><b>Password</b></label> <input
-				class="w3-input w3-border w3-white w3-border-teal" type="password"
-				name="password" id="password">
-					<div th:if="${password != null}">
+				class="w3-text-teal" for="apellido"><b>Apellido</b></label> <input
+				class="w3-input w3-border w3-white w3-border-teal" type="text"
+				name="apellido" id="password">
+					<div th:if="${usuario != null && usuario.apellido != null}">
 		<div
 			class="w3-panel w3-border w3-border-blue w3-hover-shadow w3-padding w3-red w3-display-containerd">
 			<span onclick="this.parentElement.style.display='none'"
 				class="w3-button w3-text-black w3-right w3-yellow">X</span>
 			<p>
-				<strong>Password: <span th:text="${password}" class=""></span></strong>
+				<strong>Apellido: <span th:text="${usuario.apellido}" class=""></span></strong>
 			</p>
 		</div>
 	</div>
@@ -79,13 +79,13 @@
 				class="w3-input w3-border w3-white w3-border-teal" type="email"
 				name="email" id="email">
 				
-				<div th:if="${email != null}">
+				<div th:if="${usuario != null && usuario.email != null}">
 		<div
 			class="w3-panel w3-border w3-border-blue w3-hover-shadow w3-padding w3-red w3-display-containerd">
 			<span onclick="this.parentElement.style.display='none'"
 				class="w3-button w3-text-black w3-right w3-yellow">X</span>
 			<p>
-				<strong>email: <span th:text="${email}" class=""></span></strong>
+				<strong>email: <span th:text="${usuario.email}" class=""></span></strong>
 			</p>
 		</div>
 	</div>
@@ -94,6 +94,6 @@
 				value="Registrar" />
 				
 		</form>
-	</div>
+	</div>	
 </body>
 </html>

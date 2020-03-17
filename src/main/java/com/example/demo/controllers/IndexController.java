@@ -1,23 +1,28 @@
 package com.example.demo.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.naming.Binding;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.models.Fecha;
 import com.example.demo.models.Usuario;
+import com.example.demo.models.UsuarioValido;
 
-import ch.qos.logback.classic.Logger;
 
 
 
@@ -30,9 +35,6 @@ public class IndexController {
 	 */
 	@Value("${titulo.pathVariable}")
 	private String tituloPath;
-	
-	@Value("${titulo.formulario}")
-	private String tituloForm;
 	
 	/**
 	 * Variable que viene desde /PropertiesAPP/titulos.properties
@@ -168,48 +170,6 @@ public class IndexController {
 		return "forward:/index";
 	}
 	
-	/**
-	 * Formalarios get
-	 * @param model
-	 * @return
-	 */
-	@GetMapping("/form")
-	public String form(Model model) {
-		model.addAttribute("titulo", tituloForm);
-		return "form";
-	}
-	/**
-	 * Formalarios post
-	 * @param model
-	 * @return
-	 */
-	@PostMapping("/form")
-	public String formPost(Model model,
-			@RequestParam String username, //el nombre de la variable debe ser igual a la del name del form 
-			@RequestParam(value = "password") String password, //puedes usar value tambien
-			@RequestParam String email) {
-		
-		//verificamos que no esten vacios para que no se muestren las tarjetas rojas en la vista
-		username=username.isEmpty()?null:username;
-		password=password.isEmpty()?null:password;
-		email=email.isEmpty()?null:email;
-
-		model.addAttribute("username", username); //pasamos las variables al modelo
-		model.addAttribute("password", password);
-		model.addAttribute("email", email);
-		model.addAttribute("titulo", tituloForm);
-		return "form";
-	}
-	
-	/**
-	 * Este método es un atributo que siempre llevará el Modelo, algo común para todos como la fecha
-	 * @return
-	 */
-	@ModelAttribute("fecha")//Atributo que siempre llevara el model
-	public Fecha fecha() {
-		Fecha fecha=Fecha.creaFechaDeAhora();
-		return fecha;
-	}
 	
 	
 	
