@@ -1,34 +1,45 @@
 package com.example.demo.controllers;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.example.demo.models.Fecha;
 import com.example.demo.models.Usuario;
 import com.example.demo.models.UsuarioValido;
+import com.example.demo.validation.UsuarioValidador;
 
 @Controller
+@SessionAttributes("usuarioValido") // usamos la sesión para que se pueda guardar un obj toda ella y no pierda info,
+									// en este caso fue para el usuarioValido. no perder su id
 public class FormController {
-	
+
 	/**
 	 * Variable tomada del fichero desde /PropertiesAPP/titulos.properties
 	 */
 	@Value("${titulo.formulario}")
 	private String tituloForm;
-	
+
 	/**
 	 * Formalarios get
+	 * 
 	 * @param model
 	 * @return
 	 */
@@ -36,34 +47,38 @@ public class FormController {
 	public String form(Model model) {
 		return "form";
 	}
+
 	/**
 	 * Formalarios post
+	 * 
 	 * @param model
 	 * @return
 	 */
 	@PostMapping("/form")
-	public String formPost(Model model,
-			@RequestParam String username, //el nombre de la variable debe ser igual a la del name del form 
-			@RequestParam(value = "password") String password, //puedes usar value tambien
+	public String formPost(Model model, @RequestParam String username, // el nombre de la variable debe ser igual a la
+																		// del name del form
+			@RequestParam(value = "password") String password, // puedes usar value tambien
 			@RequestParam String email) {
-		
-		//verificamos que no esten vacios para que no se muestren las tarjetas rojas en la vista
-		username=username.isEmpty()?null:username;
-		password=password.isEmpty()?null:password;
-		email=email.isEmpty()?null:email;
 
-		model.addAttribute("username", username); //pasamos las variables al modelo
+		// verificamos que no esten vacios para que no se muestren las tarjetas rojas en
+		// la vista
+		username = username.isEmpty() ? null : username;
+		password = password.isEmpty() ? null : password;
+		email = email.isEmpty() ? null : email;
+
+		model.addAttribute("username", username); // pasamos las variables al modelo
 		model.addAttribute("password", password);
 		model.addAttribute("email", email);
 		return "form";
 	}
-	
+
 	/**
-	 * handler para usar con un usuario directamente y no usar un @RequestParam,
-	 * El propio Spring toma los nombre de los inputs del formulario y los añade
-	 * a la variable que esta de primera, como usuario, respetando el nombre de los 
-	 * seterrs de la clase usurio con los name de los inputs del formulario, así solo se
-	 * añade al atributo del model
+	 * handler para usar con un usuario directamente y no usar un @RequestParam, El
+	 * propio Spring toma los nombre de los inputs del formulario y los añade a la
+	 * variable que esta de primera, como usuario, respetando el nombre de los
+	 * seterrs de la clase usurio con los name de los inputs del formulario, así
+	 * solo se añade al atributo del model
+	 * 
 	 * @param usuario
 	 * @param model
 	 * @return
@@ -71,16 +86,17 @@ public class FormController {
 	@PostMapping("/formClass")
 	public String formPostClase(Usuario usuario, Model model) {
 		// Se pone nulo si estan vaciós para que no se muestren los bloques rojos -----
-		usuario.setApellido(usuario.getApellido().isEmpty()?null:usuario.getApellido());
-		usuario.setNombre(usuario.getNombre().isEmpty()?null:usuario.getNombre());
-		usuario.setEmail(usuario.getEmail().isEmpty()?null:usuario.getEmail());
-		//------------------------------------------------------------------------------
+		usuario.setApellido(usuario.getApellido().isEmpty() ? null : usuario.getApellido());
+		usuario.setNombre(usuario.getNombre().isEmpty() ? null : usuario.getNombre());
+		usuario.setEmail(usuario.getEmail().isEmpty() ? null : usuario.getEmail());
+		// ------------------------------------------------------------------------------
 		model.addAttribute("usuario", usuario);
 		return "formClass";
 	}
-	
+
 	/**
 	 * Mostrar la vista del fomuralio donde se usa una clase para recibir
+	 * 
 	 * @param model
 	 * @return
 	 */
@@ -88,89 +104,143 @@ public class FormController {
 	public String formClas(Model model) {
 		return "formClass";
 	}
-	
-	
+
 	/**
-	 * Muestra la vista de un formulario donde se usa @valid y un Map para los errores, el propio usuario lo inyecta al modelo que va a la vista y se puede usar
+	 * Muestra la vista de un formulario donde se usa @valid y un Map para los
+	 * errores, el propio usuario lo inyecta al modelo que va a la vista y se puede
+	 * usar
+	 * 
 	 * @param model
 	 * @return
 	 */
-	@PostMapping("/formClassMap")//Se puede usar @ModelAttribute("user") para cambiar el nombre de la variable en la vista
-	public String formPostMap(@Valid UsuarioValido usuariovalido, BindingResult result, Model model) {//Binding despues del objeto a validar, y el obj el primero
-		
-		if (result.hasErrors()) {//Mirarmos si hay errores
-			Map<String,String> errores=new HashMap<>();//Creamos un map para insertar los errores
-			result.getFieldErrors().forEach(err ->{//Recogemos la listar de errores y usamos foreach para hacer una funcion lambda y añadir cada error
-				errores.put(err.getField(), "El campo "+err.getField()+" "+err.getDefaultMessage());
+	@PostMapping("/formClassMap") // Se puede usar @ModelAttribute("user") para cambiar el nombre de la variable
+									// en la vista
+	public String formPostMap(@Valid UsuarioValido usuariovalido, BindingResult result, Model model) {// Binding despues
+																										// del objeto a
+																										// validar, y el
+																										// obj el
+																										// primero
+
+		if (result.hasErrors()) {// Mirarmos si hay errores
+			Map<String, String> errores = new HashMap<>();// Creamos un map para insertar los errores
+			result.getFieldErrors().forEach(err -> {// Recogemos la listar de errores y usamos foreach para hacer una
+													// funcion lambda y añadir cada error
+				errores.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
 			});
-			model.addAttribute("error",errores); //añadimos los errores como una variable al model
+			model.addAttribute("error", errores); // añadimos los errores como una variable al model
 			return "formClassMap";
 		}
 		return "formClassMap";
 	}
-	
-	
+
 	/**
-	 * Muestra la vista de un formulario donde se usa @valid y un Map para los errores
+	 * Muestra la vista de un formulario donde se usa @valid y un Map para los
+	 * errores
+	 * 
 	 * @param model
 	 * @return
 	 */
 	@GetMapping("/formClassMap")
 	public String formClassMap(Model model) {
-		model.addAttribute("usuarioValido", new UsuarioValido());//Se envía un usuario para que no tenga errores la vista
-		
+		model.addAttribute("usuarioValido", new UsuarioValido());// Se envía un usuario para que no tenga errores la
+																	// vista
+
 		return "formClassMap";
 	}
-	
-	
+
 	/**
 	 * Muestra el la vista para el uso de etiquetas thymeleaf de formularios
+	 * 
 	 * @param model
 	 * @return
 	 */
 	@GetMapping("/formClassThymeleaf")
 	public String formThymeleaf(Model model) {
-		UsuarioValido usuarioValido= new UsuarioValido();
-		usuarioValido.setApellido("Pasando este dato desde el controlador");
-		model.addAttribute("usuarioValido", usuarioValido);//Se envía un usuario para que no tenga errores la vista
-		
+		UsuarioValido usuarioValido = new UsuarioValido();
+		usuarioValido.setApellido("apellido");
+		usuarioValido.setNombre("nombre");
+		usuarioValido.setEmail("tu@email.com");
+		usuarioValido.setId("22kjkj");
+		usuarioValido.setAnnos(34);
+		usuarioValido.setNacimiento(Fecha.creaFechaDeAhora());
+		model.addAttribute("usuarioValido", usuarioValido);// Se envía un usuario para que no tenga errores la vista
+
 		return "formClassThymeleaf";
 	}
-	
-	
+
 	/**
-	 * Uso de thyme leaf para solucionar los errores y el codigo de formularios, y pasar lo errores más sencillo 
+	 * usamos el usuario validador para validar el usuarioValido
+	 */
+	@Autowired
+	private UsuarioValidador validador;
+
+//	@InitBinder
+//	public void initBinder(WebDataBinder binder) {
+//		//binder.addValidators(validador);
+//		binder.setValidator(validador);
+//	}
+//	
+
+	/**
+	 * Uso de thyme leaf para solucionar los errores y el codigo de formularios, y
+	 * pasar lo errores más sencillo
+	 * 
 	 * @param usuariovalido
 	 * @param result
 	 * @param model
 	 * @return
 	 */
-	@PostMapping("/formClassThymeleaf")//Se puede usar @ModelAttribute("user") para cambiar el nombre de la variable en la vista
+	@PostMapping("/formClassThymeleaf") // Se puede usar @ModelAttribute("user") para cambiar el nombre de la variable
+										// en la vista
 	public String formPostThymeleaf(@Valid UsuarioValido usuariovalido,
 			BindingResult result,
-			Model model) {//Binding despues del objeto a validar, y el obj el primero
-		//aqúi ya podemos olvidar enviar erroes y al usuario
+			Model model,
+			@RequestParam(required = false) String nacimiento,
+			SessionStatus status) {// Binding despues del objeto a validar, y el obj el primero
+		// aqúi ya podemos olvidar enviar erroes y al usuario
+
+		usuariovalido.setNacimiento(new Fecha(nacimiento));//Le asignamos la fecha despues de obtener el campo desde el input date
+		
+		/*
+		 * Para validar el apellido desde el validador y tomar la respuesta del
+		 * message.properties usamos este método validate para que se pueda validar con
+		 * las anotaciones tambien, pero se puede hacer de forma autómatica con
+		 * el @Valid, así válida con las anotaciones también
+		 */
+		validador.validate(usuariovalido, result);
+		//[1984-10-02]
+		// Si tiene errores el formulaio no terminamos la sesión así no perdemos datos
+		if (result.hasErrors()) {
+			return "formClassThymeleaf";
+		}
+
+		status.setComplete();// Completa la session y elimina el obj de la sesión, pasando el id siempre
+								// hasta llegar aqui
+
 		return "formClassThymeleaf";
 	}
-	
-	
+
 	/**
-	 * Este método es un atributo que siempre llevará el Modelo, algo común para todos como la fecha
+	 * Este método es un atributo que siempre llevará el Modelo, algo común para
+	 * todos como la fecha
+	 * 
 	 * @return
 	 */
-	@ModelAttribute("titulo")//Atributo que siempre llevara el model
+	@ModelAttribute("titulo") // Atributo que siempre llevara el model
 	public String titulo() {
 		return tituloForm;
 	}
+
 	/**
-	 * Este método es un atributo que siempre llevará el Modelo, algo común para todos como la fecha
+	 * Este método es un atributo que siempre llevará el Modelo, algo común para
+	 * todos como la fecha
+	 * 
 	 * @return
 	 */
-	@ModelAttribute("fecha")//Atributo que siempre llevara el model
+	@ModelAttribute("fecha") // Atributo que siempre llevara el model
 	public Fecha fecha() {
-		Fecha fecha=Fecha.creaFechaDeAhora();
+		Fecha fecha = Fecha.creaFechaDeAhora();
 		return fecha;
 	}
-	
 
 }
